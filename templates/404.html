@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ _('404_title') }} — Princess Spa{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="container" style="text-align: center; padding: 60px 24px;">
+    <h1 style="font-size: 40px; margin-bottom: 14px;">{{ _('404_heading') }}</h1>
+    <p class="muted" style="margin-bottom: 28px;">{{ _('404_text') }}</p>
+    <a class="btn btn-primary btn-lg" href="/">{{ _('404_btn') }}</a>
+  </div>
+</section>
+{% endblock %}

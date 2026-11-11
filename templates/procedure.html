@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% from '_macros.html' import clock_icon %}
+
+{% block title %}{{ proc.name }} — Princess Spa{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <div class="container">
+    <a class="back-link" href="/procedures">{{ _('back_all_procs') }}</a>
+    <h1>{{ proc.name }}</h1>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container proc-detail">
+    <div class="proc-detail-img">
+      {% if proc.image %}<img src="/{{ proc.image }}" alt="{{ proc.name }}">{% endif %}
+    </div>
+    <div class="proc-detail-info">
+      <span class="proc-tag proc-tag-static">{{ proc.category|cat }}</span>
+      <p class="proc-detail-desc">{{ proc.description }}</p>
+      <div class="proc-detail-meta">
+        <span class="proc-duration">{{ clock_icon() }} {{ proc.duration_min }} {{ _('proc_minutes') }}</span>
+        <span class="proc-price proc-price-big">{{ proc.price|price }}</span>
+      </div>
+      <a class="btn btn-primary btn-lg" href="/booking/{{ proc.id }}">{{ _('btn_book_proc') }}</a>
+      <div class="proc-detail-notes">
+        <div class="chip">{{ _('note_hypo') }}</div>
+        <div class="chip">{{ _('note_sterile') }}</div>
+        <div class="chip">{{ _('note_photo') }}</div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

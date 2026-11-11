@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ _('staff_title') }} — Princess Spa{% endblock %}
+
+{% block content %}
+<div class="container cabinet">
+  <h2>{{ _('staff_title_owner') if current_user.role == 'owner' else _('staff_title_admin') }}</h2>
+  <div class="tabs" id="staff-tabs" data-role="{{ current_user.role }}">
+    {% if current_user.role == 'owner' %}<button class="tab" data-tab="stats" type="button">{{ _('tab_stats') }}</button>{% endif %}
+    <button class="tab active" data-tab="bookings" type="button">{{ _('tab_bookings') }}</button>
+    <button class="tab" data-tab="procedures" type="button">{{ _('tab_procedures') }}</button>
+    {% if current_user.role == 'owner' %}<button class="tab" data-tab="approvals" type="button">{{ _('tab_approvals') }}</button>{% endif %}
+    {% if current_user.role == 'owner' %}<button class="tab" data-tab="staff" type="button">{{ _('tab_staff') }}</button>{% endif %}
+  </div>
+
+  <div class="tab-page hidden" id="tab-stats"></div>
+
+  <div class="tab-page" id="tab-bookings">
+    <div class="booking-request-notice" id="pending-bookings-notice" role="status" aria-live="polite"></div>
+    <div class="filters">
+      <select id="filter-status">
+        <option value="">{{ _('filter_all_statuses') }}</option>
+        <option value="new">{{ _('filter_new') }}</option>
+        <option value="confirmed">{{ _('filter_confirmed') }}</option>
+        <option value="completed">{{ _('filter_completed') }}</option>
+        <option value="cancelled">{{ _('filter_cancelled') }}</option>
+        <option value="rejected">{{ _('filter_rejected') }}</option>
+      </select>
+      <input type="date" id="filter-date">
+      <button class="btn btn-ghost btn-sm" id="filter-reset" type="button">{{ _('filter_reset') }}</button>
+    </div>
+    <div id="admin-bookings-table"></div>
+  </div>
+
+  <div class="tab-page hidden" id="tab-procedures">
+    {% if current_user.role == 'admin' %}
+    <div class="tab-actions">
+      <button class="btn btn-primary" id="add-procedure-btn" type="button">{{ _('add_procedure') }}</button>
+    </div>
+    {% elif current_user.role == 'owner' %}
+    <div class="tab-actions">
+      <p>{{ _('procedure_approval_hint') }}</p>
+      <button class="btn btn-ghost" id="open-approvals-btn" type="button">{{ _('tab_approvals') }}</button>
+    </div>
+    {% endif %}
+    <div id="admin-procedures-table"></div>
+  </div>
+
+  {% if current_user.role == 'owner' %}
+  <div class="tab-page hidden" id="tab-approvals">
+    <div id="procedure-approvals" aria-live="polite"></div>
+  </div>
+  {% endif %}
+
+  <div class="tab-page hidden" id="tab-staff">
+    <div class="tab-actions">
+      <button class="btn btn-primary" id="add-staff-btn" type="button">{{ _('add_staff') }}</button>
+    </div>
+    <div id="admin-staff-table"></div>
+  </div>
+</div>
+
+{% if current_user.role == 'admin' %}
+<div class="modal-overlay hidden" id="procedure-modal">
+  <div class="modal">
+    <button class="modal-close" data-close aria-label="{{ _('btn_close') }}" type="button">×</button>
+    <h3 id="procedure-modal-title">{{ _('modal_proc_new') }}</h3>
+    <form id="procedure-form">
+      <label>{{ _('th_name') }}<input name="name" required minlength="3" maxlength="160"></label>
+      <div class="form-row">
+        <label>{{ _('label_category') }}
+          <select name="category">
+            <option value="Ноготки">{{ 'Ноготки'|cat }}</option><option value="Волосы">{{ 'Волосы'|cat }}</option><option value="Образ">{{ 'Образ'|cat }}</option><option value="Уход">{{ 'Уход'|cat }}</option><option value="Праздники">{{ 'Праздники'|cat }}</option>
+          </select>
+        </label>
+        <label>{{ _('label_duration') }}<input type="number" name="duration_min" min="15" max="240" step="5" required></label>
+      </div>
+      <div class="form-row">
+        <label>{{ _('label_price') }}<input type="number" name="price" min="1" max="100000" required></label>
+        <label>{{ _('label_image') }}<input name="image" readonly></label>
+      </div>
+      <div class="procedure-preview">
+        <label>{{ _('label_image') }}<input type="file" name="image_file" accept="image/png,image/jpeg,image/webp" aria-describedby="procedure-image-hint"></label>
+        <p id="procedure-image-hint">{{ _('image_upload_hint') }}</p>
+        <img id="procedure-image-preview" class="image-preview hidden" alt="{{ _('label_image') }}">
+        <p id="procedure-image-empty">{{ _('image_none') }}</p>
+        <button class="btn btn-ghost btn-sm" id="remove-procedure-image" type="button">{{ _('image_remove') }}</button>
+      </div>
+      <label>{{ _('label_description') }}<textarea name="description" rows="3" maxlength="4000"></textarea></label>
+      <label class="check-label"><input type="checkbox" name="active" checked> {{ _('label_active') }}</label>
+      <div class="form-error hidden"></div>
+      <button class="btn btn-primary btn-block" type="submit">{{ _('btn_send_approval') }}</button>
+    </form>
+  </div>
+</div>
+{% endif %}
+
+<div class="modal-overlay hidden" id="staff-modal">
+  <div class="modal">
+    <button class="modal-close" data-close aria-label="{{ _('btn_close') }}" type="button">×</button>
+    <h3>{{ _('modal_staff_new') }}</h3>
+    <form id="staff-form">
+      <label>{{ _('profile_name') }}<input name="name" required minlength="2"></label>
+      <label>{{ _('label_email') }}<input type="email" name="email" required></label>
+      <label>{{ _('label_phone') }}<input type="tel" name="phone"></label>
+      <label>{{ _('label_password') }}<input type="password" name="password" required minlength="6"></label>
+      <div class="form-error hidden"></div>
+      <button class="btn btn-primary btn-block" type="submit">{{ _('btn_add') }}</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}<script src="/js/staff.js" defer></script>{% endblock %}

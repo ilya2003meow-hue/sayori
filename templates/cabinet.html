@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ _('cabinet_title') }} — Princess Spa{% endblock %}
+
+{% block content %}
+<div class="container cabinet">
+  <div class="cabinet-head">
+    <div>
+      <h2>{{ _('cabinet_hello') }}, {{ current_user.name }}!</h2>
+      <p class="muted">{{ _('cabinet_sub') }}</p>
+    </div>
+    <a class="btn btn-primary" href="/procedures">{{ _('cabinet_new_booking') }}</a>
+  </div>
+
+  <div class="profile-card" id="profile-view">
+    <div class="profile-avatar">{{ current_user.name[:1]|upper }}</div>
+    <div class="profile-info">
+      <div class="profile-name-row"><h3>{{ current_user.name }}</h3><span class="reply-role">{{ role_labels[current_user.role] }}</span></div>
+      <div class="profile-lines">
+        <span>{{ current_user.email }}</span>
+        <span>{{ current_user.phone or _('profile_phone_missing') }}</span>
+        <span class="muted">{{ _('profile_since') }} {{ current_user.created_at[:10] }}</span>
+      </div>
+    </div>
+    <button class="btn btn-ghost btn-sm" id="edit-profile-btn" type="button">{{ _('profile_edit') }}</button>
+  </div>
+
+  <form id="profile-form" class="form-card profile-edit hidden">
+    <h3>{{ _('profile_form_title') }}</h3>
+    <label>{{ _('profile_name') }}<input name="name" required minlength="2" value="{{ current_user.name }}"></label>
+    <label>{{ _('label_phone') }}<input name="phone" type="tel" value="{{ current_user.phone }}"></label>
+    <div class="form-error hidden"></div>
+    <div class="profile-actions">
+      <button class="btn btn-primary" type="submit">{{ _('profile_save') }}</button>
+      <button class="btn btn-ghost" id="profile-cancel" type="button">{{ _('profile_cancel') }}</button>
+    </div>
+  </form>
+
+  <h3 class="cabinet-sub">{{ _('my_bookings') }}</h3>
+  <div class="bookings-list" id="my-bookings"></div>
+</div>
+{% endblock %}
+
+{% block scripts %}<script src="/js/cabinet.js" defer></script>{% endblock %}

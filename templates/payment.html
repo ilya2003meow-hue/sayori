@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ _('payment_page_title') }} — Princess Spa{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="container booking-page">
+    <div class="form-card payment-page-card">
+      <h1>{{ _('payment_page_title') }}</h1>
+      <p class="muted">{{ _('payment_page_hint') }}</p>
+      <div class="payment-page-amount">
+        <span>{{ _('payment_amount_label') }}</span>
+        <strong>{{ booking.deposit_amount|price }}</strong>
+      </div>
+      <p><strong>{{ _('payment_reference') }}:</strong> Princess Spa #{{ booking.id }}</p>
+      {% if booking.payment_status == 'paid' %}
+        <p class="payment-success">{{ _('payment_paid_label') }}</p>
+      {% elif kaspi_payment_url %}
+        <img class="payment-qr" src="/payment/{{ booking.id }}/qr.png" alt="Kaspi QR">
+        <p class="muted">{{ _('payment_qr_instructions') }}</p>
+        <p class="muted payment-note">{{ _('payment_remote_link_note') }}</p>
+        <a class="btn btn-primary btn-block" href="{{ kaspi_payment_url }}" target="_blank" rel="noopener noreferrer">{{ _('payment_open_kaspi') }}</a>
+        <p class="muted payment-note">{{ _('payment_waiting_note') }}</p>
+      {% else %}
+        <p class="form-error">{{ _('payment_qr_unavailable') }}</p>
+      {% endif %}
+      <a class="btn btn-ghost btn-block" href="/cabinet">{{ _('cabinet_title') }}</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

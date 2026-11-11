@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ _('booking_title') }}: {{ proc.name }} — Princess Spa{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <div class="container">
+    <a class="back-link" href="/procedures/{{ proc.id }}">{{ _('back_to_proc') }}</a>
+    <h1>{{ _('booking_title') }}</h1>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container booking-page">
+    <div class="form-card">
+      <div class="booking-proc" data-procedure-id="{{ proc.id }}">
+        {% if proc.image %}<img src="/{{ proc.image }}" alt="">{% endif %}
+        <div>
+          <h4>{{ proc.name }}</h4>
+          <div class="muted">{{ proc.duration_min }} {{ _('proc_min') }} · {{ proc.price|price }}</div>
+        </div>
+      </div>
+      <form id="booking-form">
+        <label>{{ _('booking_date') }}<input type="date" name="date" required></label>
+        <div class="slots-label">{{ _('booking_slots') }}</div>
+        <div class="slots-grid" id="slots-grid"></div>
+        <div class="form-row">
+          <label>{{ _('booking_child_name') }}<input name="child_name" required minlength="2"></label>
+          <label>{{ _('booking_child_age') }}<input type="number" name="child_age" min="2" max="17" required></label>
+        </div>
+        <label>{{ _('booking_children_count') }}<input type="number" name="children_count" min="1" max="12" value="1" required></label>
+        <label>{{ _('booking_comment') }}<textarea name="comment" rows="2" maxlength="500" placeholder="{{ _('booking_comment_ph') }}"></textarea></label>
+        <fieldset class="payment-choice">
+          <legend>{{ _('booking_payment_method') }}</legend>
+          <label class="payment-option">
+            <input type="radio" name="payment_channel" value="kaspi_qr" {% if kaspi_payment_enabled %}checked{% else %}disabled{% endif %}>
+            <span><strong>{{ _('booking_pay_kaspi') }}</strong><small>{% if kaspi_payment_enabled %}{{ _('booking_kaspi_hint') }}{% else %}{{ _('payment_qr_unavailable') }}{% endif %}</small></span>
+          </label>
+          <label class="payment-option">
+            <input type="radio" name="payment_channel" value="onsite" {% if not kaspi_payment_enabled %}checked{% endif %}>
+            <span><strong>{{ _('booking_pay_onsite_method') }}</strong><small>{{ _('booking_onsite_method_hint') }}</small></span>
+          </label>
+        </fieldset>
+        <fieldset class="payment-choice" id="payment-plan-choice" {% if not kaspi_payment_enabled %}hidden{% endif %}>
+          <legend>{{ _('booking_plan_legend') }}</legend>
+          <label class="payment-option">
+            <input type="radio" name="payment_method" value="deposit" checked>
+            <span><strong>{{ _('booking_pay_deposit') }}</strong><small>{{ _('booking_deposit_hint') }}</small></span>
+          </label>
+          <label class="payment-option">
+            <input type="radio" name="payment_method" value="full">
+            <span><strong>{{ _('booking_pay_full') }}</strong><small>{{ _('booking_full_hint') }}</small></span>
+          </label>
+        </fieldset>
+        <div class="payment-total" id="payment-total" data-price="{{ proc.price }}" data-percent="20"></div>
+        <div class="form-error hidden"></div>
+        <button class="btn btn-primary btn-block btn-lg" type="submit">{{ _('booking_submit') }}</button>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}<script src="/js/booking.js" defer></script>{% endblock %}

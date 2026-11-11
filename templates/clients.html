@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ _('clients_title') }} — Princess Spa{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <div class="container">
+    <h1>{{ _('clients_title') }}</h1>
+    <p>{{ _('clients_sub') }}</p>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+    <div class="stats-grid stats-grid-3" id="clients-summary"></div>
+    <div class="filters">
+      <input type="search" id="clients-search" placeholder="{{ _('clients_search_ph') }}">
+    </div>
+    <div id="clients-table" data-can-manage="{{ 'true' if current_user.role == 'admin' else 'false' }}"></div>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}<script src="/js/clients.js" defer></script>{% endblock %}

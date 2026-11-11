@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% from '_macros.html' import clock_icon %}
+
+{% block title %}{{ _('contacts_title') }} — Princess Spa{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <div class="container">
+    <h1>{{ _('contacts_title') }}</h1>
+    <p>{{ _('contacts_sub') }}</p>
+  </div>
+</div>
+
+<section class="section" id="visit">
+  <div class="container">
+    <div class="visit-panel">
+      <img class="site-qr" src="/qr.png" alt="{{ _('qr_alt') }}" width="330" height="330">
+      <div class="visit-content">
+        <h2 class="section-title">{{ _('visit_title') }}</h2>
+        <p>{{ _('qr_hint') }}</p>
+        <div class="visit-actions">
+          <a class="btn btn-primary" href="/procedures">{{ _('contacts_book_btn') }}</a>
+          <a class="btn btn-ghost" href="{{ '/reviews#review-form-card' if current_user else '/login?next=/reviews%23review-form-card' }}">{{ _('review_form_title') }}</a>
+        </div>
+        <p class="muted">{{ _('qr_network') }}</p>
+        <a class="visit-url" href="{{ phone_url }}">{{ phone_url }}</a>
+        <a class="btn btn-ghost btn-sm" href="/qr.png" download="PrincessSpa-QR.png">{{ _('qr_download') }}</a>
+      </div>
+    </div>
+    <div class="contact-cards">
+      <div class="feature-card">
+        <svg viewBox="0 0 24 24" class="icon"><path d="M12 21s-7-6-7-11a7 7 0 0114 0c0 5-7 11-7 11z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.6" fill="currentColor"/></svg>
+        <h3>{{ _('c_address') }}</h3>
+        <p>{{ settings.address }}</p>
+        <p class="muted">{{ _('c_address_note') }}</p>
+      </div>
+      <div class="feature-card">
+        <svg viewBox="0 0 24 24" class="icon"><path d="M5 4h4l2 5-2.5 1.5a12 12 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+        <h3>{{ _('c_phone') }}</h3>
+        <p><a href="tel:{{ settings.phone|replace(' ', '')|replace('(', '')|replace(')', '')|replace('-', '') }}">{{ settings.phone }}</a></p>
+        <p class="muted">{{ _('c_phone_note') }}</p>
+      </div>
+      <div class="feature-card">
+        {{ clock_icon() }}
+        <h3>{{ _('c_hours') }}</h3>
+        <p>{{ settings.hours }}</p>
+        <p class="muted">{{ _('c_hours_note') }}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-tint">
+  <div class="container faq-wrap">
+    <h2 class="section-title">{{ _('faq_title') }}</h2>
+    <p class="section-sub">{{ _('faq_sub') }}</p>
+    <details class="faq-item">
+      <summary>{{ _('faq1_q') }}</summary>
+      <p>{{ _('faq1_a') }}</p>
+    </details>
+    <details class="faq-item">
+      <summary>{{ _('faq2_q') }}</summary>
+      <p>{{ _('faq2_a') }}</p>
+    </details>
+    <details class="faq-item">
+      <summary>{{ _('faq3_q') }}</summary>
+      <p>{{ _('faq3_a') }}</p>
+    </details>
+    <details class="faq-item">
+      <summary>{{ _('faq4_q') }}</summary>
+      <p>{{ _('faq4_a') }}</p>
+    </details>
+    <div class="center">
+      <a class="btn btn-primary btn-lg" href="/procedures">{{ _('contacts_book_btn') }}</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

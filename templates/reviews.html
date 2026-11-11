@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% from '_macros.html' import review_card with context %}
+
+{% block title %}{{ _('reviews_title') }} — Princess Spa{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <div class="container">
+    <h1>{{ _('reviews_title') }}</h1>
+    <p>{{ _('reviews_sub') }}</p>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+    <div class="form-card review-form-card" id="review-form-card">
+      <h3>{{ _('review_form_title') }}</h3>
+      {% if current_user %}
+      <form id="review-form">
+        <label>{{ _('review_rating') }}
+          <select name="rating">
+            <option value="5">{{ _('rating_5') }}</option>
+            <option value="4">{{ _('rating_4') }}</option>
+            <option value="3">{{ _('rating_3') }}</option>
+            <option value="2">{{ _('rating_2') }}</option>
+            <option value="1">{{ _('rating_1') }}</option>
+          </select>
+        </label>
+        <label>{{ _('review_text_label') }}<textarea name="text" rows="4" required minlength="5" maxlength="1000" placeholder="{{ _('review_placeholder') }}"></textarea></label>
+        <div class="form-error hidden"></div>
+        <button class="btn btn-primary" type="submit">{{ _('review_submit') }}</button>
+      </form>
+      {% else %}
+      <p class="muted">{{ _('review_login_prompt') }}</p>
+      <a class="btn btn-ghost" href="/login?next=/reviews">{{ _('btn_login') }}</a>
+      {% endif %}
+    </div>
+
+    <div class="cards-grid reviews-list" aria-live="polite" aria-relevant="additions text">
+      {% for r in reviews %}{{ review_card(r, True) }}{% else %}
+      <div class="empty-state reviews-empty">{{ _('reviews_empty') }}</div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}<script src="/js/reviews.js" defer></script>{% endblock %}

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}{{ _('site_title') }}{% endblock %}</title>
+<meta name="description" content="{{ _('meta_desc') }}">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23ff6fb3' d='M3 17h18l-1.5-9-4.5 3.5L12 5l-3 6.5L4.5 8z'/%3E%3Crect x='3' y='18' width='18' height='2.5' rx='1' fill='%23ff6fb3'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/styles.css">
+<script>
+(function () {
+  var t = null;
+  try { t = localStorage.getItem('pspa_theme'); } catch (e) {}
+  document.documentElement.setAttribute('data-theme', t === 'dark' ? 'dark' : 'light');
+})();
+</script>
+</head>
+<body data-page="{{ active_page }}" data-user-role="{{ current_user.role if current_user else '' }}">
+<div id="glitter-layer" aria-hidden="true"></div>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="logo" href="/">
+      <svg viewBox="0 0 24 24" class="logo-crown" aria-hidden="true"><path d="M3 17h18l-1.5-9-4.5 3.5L12 5l-3 6.5L4.5 8z" fill="currentColor"/><rect x="3" y="18" width="18" height="2.4" rx="1.2" fill="currentColor"/><circle cx="12" cy="3.4" r="1.4" fill="currentColor"/><circle cx="4.2" cy="6.4" r="1.2" fill="currentColor"/><circle cx="19.8" cy="6.4" r="1.2" fill="currentColor"/></svg>
+      <span>Princess <em>Spa</em></span>
+    </a>
+    <nav class="main-nav">
+      <a href="/" class="{{ 'active' if active_page == 'home' }}">{{ _('nav_home') }}</a>
+      <a href="/procedures" class="{{ 'active' if active_page == 'procedures' }}">{{ _('nav_procedures') }}</a>
+      <a href="/about" class="{{ 'active' if active_page == 'about' }}">{{ _('nav_about') }}</a>
+      <a href="/reviews" class="{{ 'active' if active_page == 'reviews' }}">{{ _('nav_reviews') }}</a>
+      <a href="/events" class="{{ 'active' if active_page == 'events' }}">{{ _('nav_events') }}</a>
+      <a href="/contacts" class="{{ 'active' if active_page == 'contacts' }}">{{ _('nav_contacts') }}</a>
+      {% if current_user and current_user.role in ('admin', 'owner') %}
+      <a href="/clients" class="{{ 'active' if active_page == 'clients' }}">{{ _('nav_clients') }}</a>
+      {% endif %}
+    </nav>
+    <div class="header-actions">
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="{{ _('theme_toggle') }}" title="{{ _('theme_toggle') }}">
+        <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.6 14.6a8.6 8.6 0 0 1-11.2-11.2A9 9 0 1 0 20.6 14.6z" fill="currentColor"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.4" fill="currentColor"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2.5v2.4M12 19.1v2.4M2.5 12h2.4M19.1 12h2.4M5 5l1.7 1.7M17.3 17.3L19 19M19 5l-1.7 1.7M6.7 17.3L5 19"/></g></svg>
+      </button>
+      <div class="lang-switch" role="group" aria-label="Language">
+        {% for code, label in lang_labels.items() %}
+        <button type="button" class="lang-btn{{ ' active' if lang == code }}" data-lang="{{ code }}">{{ label }}</button>
+        {% endfor %}
+      </div>
+      {% if current_user %}
+        <span class="user-chip">{{ current_user.name }} · {{ role_labels[current_user.role] }}</span>
+        {% if current_user.role == 'client' %}
+          <a class="btn btn-ghost btn-sm" href="/cabinet">{{ _('btn_cabinet') }}</a>
+        {% else %}
+          <a class="btn btn-ghost btn-sm" href="/staff">{{ _('btn_panel') }}</a>
+        {% endif %}
+        <button class="btn btn-ghost btn-sm" id="logout-btn">{{ _('btn_logout') }}</button>
+      {% else %}
+        <a class="btn btn-primary btn-sm" href="/login">{{ _('btn_login') }}</a>
+      {% endif %}
+    </div>
+  </div>
+</header>
+
+<main>
+{% block content %}{% endblock %}
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div>
+      <a class="logo logo-light" href="/">
+        <svg viewBox="0 0 24 24" class="logo-crown" aria-hidden="true"><path d="M3 17h18l-1.5-9-4.5 3.5L12 5l-3 6.5L4.5 8z" fill="currentColor"/><rect x="3" y="18" width="18" height="2.4" rx="1.2" fill="currentColor"/></svg>
+        <span>Princess <em>Spa</em></span>
+      </a>
+      <p class="footer-tag">{{ _('footer_tag') }}</p>
+    </div>
+    <div class="footer-contacts">
+      <span>{{ settings.address }}</span>
+      <span>{{ settings.phone }}</span>
+      <span>{{ settings.hours }}</span>
+    </div>
+    <p class="footer-copy">{{ _('footer_copy') }}</p>
+  </div>
+</footer>
+
+<button class="chat-fab" id="chat-fab" type="button" aria-label="{{ _('assistant_open') }}" title="{{ _('assistant_title') }}">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.6 4.9L18.5 9l-4.9 1.6L12 15.5l-1.6-4.9L5.5 9l4.9-1.1z" fill="currentColor"/><path d="M18.5 14l.9 2.6 2.6.9-2.6.9-.9 2.6-.9-2.6-2.6-.9 2.6-.9z" fill="currentColor"/><path d="M5.5 15.5l.7 2 2 .7-2 .7-.7 2-.7-2-2-.7 2-.7z" fill="currentColor"/></svg>
+</button>
+<div class="chat-panel hidden" id="chat-panel" role="dialog" aria-label="{{ _('assistant_title') }}">
+  <div class="chat-head">
+    <div class="chat-avatar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17h18l-1.5-9-4.5 3.5L12 5l-3 6.5L4.5 8z" fill="currentColor"/><rect x="3" y="18" width="18" height="2.4" rx="1.2" fill="currentColor"/></svg></div>
+    <div>
+      <div class="chat-title">{{ _('assistant_title') }}</div>
+      <div class="chat-status">{{ _('assistant_status') }}</div>
+    </div>
+    <div class="chat-head-actions">
+      <button class="chat-close" id="chat-clear" type="button" aria-label="{{ _('assistant_clear') }}" title="{{ _('assistant_clear') }}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 10v7M14 10v7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <button class="chat-close" id="chat-close" type="button" aria-label="{{ _('btn_close') }}">×</button>
+    </div>
+  </div>
+  <div class="chat-msgs" id="chat-msgs" role="log" aria-live="polite"></div>
+  <div class="chat-suggests" id="chat-suggests"></div>
+  <form class="chat-input" id="chat-form">
+    <input type="text" id="chat-text" placeholder="{{ _('assistant_placeholder') }}" autocomplete="off" maxlength="500" aria-label="{{ _('assistant_placeholder') }}">
+    <button class="chat-send" type="submit" aria-label="{{ _('assistant_send') }}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.4 20.4l17.4-7.5c.8-.3.8-1.4 0-1.7L3.4 3.7c-.7-.3-1.4.3-1.2 1L4.4 11c.1.4.4.6.8.7l7.3 1.3-7.3 1.3c-.4.1-.7.3-.8.7l-2.2 6.3c-.2.8.5 1.4 1.2 1.1z" fill="currentColor"/></svg></button>
+  </form>
+</div>
+
+<div class="toast-wrap" id="toast-wrap"></div>
+<script>window.LANG = '{{ lang }}'; window.I18N = {{ i18n_json|safe }};</script>
+<script src="/js/common.js" defer></script>
+<script src="/js/glitter.js" defer></script>
+<script src="/js/assistant.js" defer></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

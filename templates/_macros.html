@@ -1,0 +1,57 @@
+{% macro clock_icon() %}<svg viewBox="0 0 24 24" class="icon"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l3.5 2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>{% endmacro %}
+
+{% macro star_icon() %}<svg viewBox="0 0 24 24" class="icon"><path d="M12 2l2.4 7.2H22l-6 4.6 2.3 7.2-6.3-4.5-6.3 4.5L8 13.8 2 9.2h7.6z" fill="currentColor"/></svg>{% endmacro %}
+
+{% macro stars(rating) %}
+<div class="review-stars">{% for i in range(5) %}<span class="{{ '' if i < rating else 'dim' }}">{{ star_icon() }}</span>{% endfor %}</div>
+{% endmacro %}
+
+{% macro proc_card(p) %}
+<article class="proc-card" data-category="{{ p.category }}">
+  <a class="proc-img" href="/procedures/{{ p.id }}">
+    {% if p.image %}<img src="/{{ p.image }}" alt="{{ p.name }}" loading="lazy">{% else %}<div class="proc-img-fallback">{{ star_icon() }}</div>{% endif %}
+    <span class="proc-tag">{{ p.category|cat }}</span>
+  </a>
+  <div class="proc-body">
+    <h3><a class="proc-title-link" href="/procedures/{{ p.id }}">{{ p.name }}</a></h3>
+    <p>{{ p.description }}</p>
+    <div class="proc-meta">
+      <span class="proc-duration">{{ clock_icon() }} {{ p.duration_min }} {{ _('proc_min') }}</span>
+      <span class="proc-price">{{ p.price|price }}</span>
+    </div>
+    <a class="btn btn-primary btn-block" href="/booking/{{ p.id }}">{{ _('btn_book') }}</a>
+  </div>
+</article>
+{% endmacro %}
+
+{% macro review_card(r, form=False) %}
+<div class="review-card" data-review-card="{{ r.id }}">
+  {{ stars(r.rating) }}
+  <p>{{ r.text }}</p>
+  <div class="review-author">{{ r.name }}</div>
+  {% if form and current_user and current_user.role == 'admin' %}
+  <button class="btn btn-danger btn-sm" type="button" data-delete-review="{{ r.id }}">{{ _('btn_delete') }}</button>
+  {% endif %}
+  {% if r.replies %}
+  <div class="review-replies">
+    {% for rep in r.replies %}
+    <div class="reply-item" data-reply-id="{{ rep.id }}">
+      <div class="reply-head"><span class="reply-author">{{ rep.author_name }}</span><span class="reply-role">{{ role_labels[rep.author_role] }}</span></div>
+      <p>{{ rep.text }}</p>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+  {% if form %}
+    {% if current_user %}
+    <form class="reply-form" data-review-id="{{ r.id }}">
+      <textarea name="text" rows="2" required minlength="2" maxlength="1000" placeholder="{{ _('reply_placeholder') }}"></textarea>
+      <div class="form-error hidden"></div>
+      <button class="btn btn-ghost btn-sm" type="submit">{{ _('reply_submit') }}</button>
+    </form>
+    {% else %}
+    <a class="reply-login" href="/login?next=/reviews">{{ _('reply_login') }}</a>
+    {% endif %}
+  {% endif %}
+</div>
+{% endmacro %}

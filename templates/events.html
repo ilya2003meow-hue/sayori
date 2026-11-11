@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ _('events_title') }} — Princess Spa{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <div class="container">
+    <h1>{{ _('events_title') }}</h1>
+    <p>{{ _('events_sub') }}</p>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+    {% if can_manage_events %}
+    <div class="form-card event-publish-card" id="event-publish-card">
+      <h3>{{ _('event_publish_title') }}</h3>
+      <form id="event-form">
+        <label>{{ _('event_title_label') }}
+          <input name="title" required minlength="3" maxlength="120" placeholder="{{ _('event_title_placeholder') }}">
+        </label>
+        <label>{{ _('event_description_label') }}
+          <textarea name="description" rows="4" required minlength="5" maxlength="4000" placeholder="{{ _('event_description_placeholder') }}"></textarea>
+        </label>
+        <label>{{ _('event_photos_label') }}
+          <input type="file" name="photos" accept="image/png,image/jpeg,image/webp" multiple required>
+        </label>
+        <p class="event-upload-hint">{{ _('event_photos_hint') }}</p>
+        <div class="event-photo-selection" id="event-photo-selection" aria-live="polite"></div>
+        <div class="form-error hidden"></div>
+        <button class="btn btn-primary" type="submit">{{ _('event_publish_btn') }}</button>
+      </form>
+    </div>
+    {% endif %}
+
+    <div class="events-list" id="events-list" aria-live="polite" aria-relevant="additions text">
+      <div class="empty-state">{{ _('loading') }}</div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}<script src="/js/events.js" defer></script>{% endblock %}

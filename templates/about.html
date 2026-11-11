@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ _('about_title') }} — Princess Spa{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <div class="container">
+    <h1>{{ _('about_title') }}</h1>
+    <p>{{ _('about_sub') }}</p>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container about-story">
+    <div class="about-story-text">
+      <h2>{{ _('about_story_title') }}</h2>
+      <p>{{ settings.about }}</p>
+      <p>{{ _('about_p2') }}</p>
+      <p>{{ _('about_p3') }}</p>
+      <a class="btn btn-primary" href="/procedures">{{ _('about_btn_procs') }}</a>
+    </div>
+    <div class="about-photo"><img class="about-story-img" src="/img/hero-v2.png" alt="{{ _('hero_img_alt') }}"></div>
+  </div>
+</section>
+
+<section class="section section-tint">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-value">6</div><div class="stat-label">{{ _('stat_procs_label') }}</div></div>
+      <div class="stat-card"><div class="stat-value">3–14</div><div class="stat-label">{{ _('stat_age_label') }}</div></div>
+      <div class="stat-card"><div class="stat-value">{{ _('stat_party') }}</div><div class="stat-label">{{ _('stat_party_label') }}</div></div>
+      <div class="stat-card"><div class="stat-value">{{ _('stat_days') }}</div><div class="stat-label">{{ _('stat_days_label') }}</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2 class="section-title">{{ _('about_why_title') }}</h2>
+    <p class="section-sub">{{ _('about_why_sub') }}</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <svg viewBox="0 0 24 24" class="icon"><path d="M12 2l8 3v6c0 5-3.5 8.5-8 11-4.5-2.5-8-6-8-11V5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M8.5 12l2.5 2.5 4.5-4.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <h3>{{ _('f1_title') }}</h3>
+        <p>{{ _('f1_text') }}</p>
+      </div>
+      <div class="feature-card">
+        <svg viewBox="0 0 24 24" class="icon"><path d="M5 19C5 9 12 4 20 4c0 8-5 15-15 15z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M5 19c3-5 7-8 11-10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <h3>{{ _('f2_title') }}</h3>
+        <p>{{ _('f2_text') }}</p>
+      </div>
+      <div class="feature-card">
+        <svg viewBox="0 0 24 24" class="icon"><path d="M12 21s-8-5.5-8-11a4.5 4.5 0 018-3 4.5 4.5 0 018 3c0 5.5-8 11-8 11z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+        <h3>{{ _('f3_title') }}</h3>
+        <p>{{ _('f3_text') }}</p>
+      </div>
+      <div class="feature-card">
+        <svg viewBox="0 0 24 24" class="icon"><rect x="3" y="7" width="18" height="13" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="13.5" r="3.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9 7l1.5-3h3L15 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+        <h3>{{ _('f4_title') }}</h3>
+        <p>{{ _('f4_text') }}</p>
+      </div>
+    </div>
+    <div class="center">
+      <a class="btn btn-primary btn-lg" href="/procedures">{{ _('about_choose_btn') }}</a>
+    </div>
+  </div>
+</section>
+{% endblock %}
