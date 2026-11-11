@@ -5,3 +5,6 @@
 !.env.example
 data/
 h -u origin main
+
+# Local Netlify folder
+.netlify

@@ -1,0 +1,5 @@
+[build]
+  # Static site lives in /public (pre-rendered pages, css, js, images)
+  publish = "public"
+  # No build step needed
+  command = ""
